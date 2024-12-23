@@ -1,5 +1,4 @@
 const RegisteredUser = require("../models/signup.model");
-const { default: mongoose } = require("mongoose");
 const encryptPassword = require("../helpers/encryption");
 const decryptPassword = require("../helpers/decryption");
 const jwt = require("jsonwebtoken");
@@ -39,7 +38,9 @@ let signUp = async (req, res, next) => {
     });
 
     if (existingUser) {
-      return res.json({ error: false, message: "User already exists" });
+      return res
+        .status(400)
+        .json({ error: true, message: "User already exists" });
     }
 
     //^ validation for new user
@@ -83,8 +84,16 @@ let signUp = async (req, res, next) => {
 };
 
 //^ LOGIN API : TO CHECK THE LOGIN DATA FROM BACKEND
-let generateToken = (userId) => {
-  return jwt.sign({ userId }, "123", { expiresIn: "3m" });
+let generateToken = (user) => {
+  return jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      name: user.firstname,
+    },
+    "123",
+    { expiresIn: "30m" }
+  );
 };
 let login = async (req, res, next) => {
   let { username, password } = req.body;
@@ -124,13 +133,15 @@ let login = async (req, res, next) => {
     //* validation for user login
     if (existingUser) {
       if (await decryptPassword(password, existingUser.password)) {
-        let token = generateToken(existingUser._id);
+        let token = generateToken(existingUser);
 
         return res.status(201).json({
           error: false,
           message: "Logged in Successfully",
           token,
           userId: existingUser._id,
+          email: existingUser.email,
+          name: existingUser.firstname,
         });
       } else {
         return res
