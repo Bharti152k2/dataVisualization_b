@@ -5,33 +5,30 @@ let data = async (req, res) => {
     const { ageGroup, gender, startDate, endDate } = req.query;
     console.log("Received filters:", { ageGroup, gender, startDate, endDate });
 
-    console.log("Incoming startDate:", startDate);
-    console.log("Incoming endDate:", endDate);
-
-    // Normalize the date format (DD/MM/YYYY to DD/MM/YYYY for comparison)
-    const normalizeDate = (dateStr) => {
-      if (dateStr) {
-        const [day, month, year] = dateStr.split("/");
-        return `${day}/${month}/${year}`; // Keep as DD/MM/YYYY
-      }
-      return null;
+    // Normalize and convert the date format (DD/MM/YYYY to Date object)
+    const formatDateToDDMMYYYY = (dateStr) => {
+      const [day, month, year] = dateStr.split("/");
+      return `${day.padStart(1, 2,"0")}/${month.padStart(2,"0")}/${year}`;
     };
 
-    // Validate and format the dates properly
-    const formattedStartDate = startDate ? normalizeDate(startDate) : null;
-    const formattedEndDate = endDate ? normalizeDate(endDate) : null;
+    const formattedStartDate = startDate
+      ? formatDateToDDMMYYYY(startDate)
+      : null;
+    const formattedEndDate = endDate ? formatDateToDDMMYYYY(endDate) : null;
 
-    // Check if dates are valid
+    console.log("Parsed Dates:", formattedStartDate, formattedEndDate);
+
+    // Validate parsed dates
     if (startDate && !formattedStartDate) {
       return res.status(400).json({
         success: false,
-        message: "Invalid start date format",
+        message: "Invalid start date format, should be DD/MM/YYYY",
       });
     }
     if (endDate && !formattedEndDate) {
       return res.status(400).json({
         success: false,
-        message: "Invalid end date format",
+        message: "Invalid end date format, should be DD/MM/YYYY",
       });
     }
 
@@ -40,32 +37,37 @@ let data = async (req, res) => {
     if (ageGroup) query.Age = ageGroup;
     if (gender) query.Gender = gender;
 
-    // Date range filtering logic (using string comparison in DD/MM/YYYY format)
+    // Date range filtering logic
     if (formattedStartDate && formattedEndDate) {
       query.Day = {
-        $gte: formattedStartDate, // start date as string in DD/MM/YYYY format
-        $lte: formattedEndDate, // end date as string in DD/MM/YYYY format
+        $gte: formattedStartDate,
+        $lte: formattedEndDate,
       };
     } else if (formattedStartDate) {
-      query.Day = { $gte: formattedStartDate }; // Only start date filter
+      query.Day = { $gte: formattedStartDate };
     } else if (formattedEndDate) {
-      query.Day = { $lte: formattedEndDate }; // Only end date filter
+      query.Day = { $lte: formattedEndDate };
     }
 
-    // Fetch data from the database
-    const data = await Analytics.find(query);
+    console.log("Query:", query);
 
-    // Log the fetched data to inspect
-    console.log("Fetched Data:", data);
+    // Fetch data from the database
+    const fetchedData = await Analytics.find(query);
+
+    console.log("Fetched Data:", fetchedData);
 
     // Check if any data was found
-    if (data.length === 0) {
-      console.log("No matching data found.");
+    if (fetchedData.length === 0) {
+      console.log("No matching data found for this date range.");
+      return res.status(404).json({
+        success: false,
+        message: "No data found for the given date range.",
+      });
     }
 
     res.status(200).json({
       success: true,
-      data,
+      data: fetchedData,
     });
   } catch (error) {
     console.error(error);
@@ -75,6 +77,7 @@ let data = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   data,
 };
