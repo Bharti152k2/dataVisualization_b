@@ -152,8 +152,15 @@ let login = async (req, res, next) => {
     return res.status(400).json({ error: true, message: "User not found" });
   }
 };
-
+const defaultRoute=(req,res,next)=>{
+  try {
+    return res.status(200).json({message:"server is up and running"})
+  } catch (error) {
+    console.log(error)
+  }
+}
 module.exports = {
   signUp,
   login,
+  defaultRoute
 };
