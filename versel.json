@@ -13,6 +13,9 @@
     }
   ],
   "includeFiles": [
-    "/database/connect.js"
+    "database/connect.js",
+    "routes/**/*.js",
+    "models/**/*.js",
+    "controller/**/*.js"
   ]
 }
