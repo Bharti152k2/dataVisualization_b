@@ -4,11 +4,13 @@ const {
   login,
   defaultRoute,
 } = require("../controller/user.controller");
+const { data } = require("../controller/analytics.controller");
 
 let router = express.Router();
 router.post("/signup", signUp);
 router.post("/login", login);
 router.get("/", defaultRoute);
+router.get("/data", data);
 // router.get("/userdata", userData);
 // router.delete("/logout", logout);
 
