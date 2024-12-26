@@ -23,3 +23,4 @@ let startServer = async () => {
   }
 };
 startServer();
+module.exports = app;
