@@ -3,9 +3,16 @@ const cors = require("cors");
 const app = express();
 const connectDb = require("./database/connect.js");
 const user = require("./routes/user.routes.js");
-const analytics = require('./routes/analytics.routes.js'); // Import the model
+const analytics = require("./routes/analytics.routes.js"); // Import the model
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use("/api", user);
 app.use("/api", analytics);
 app.listen(4000, () => {
