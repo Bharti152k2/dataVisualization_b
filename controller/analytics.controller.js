@@ -8,7 +8,7 @@ let data = async (req, res) => {
     // Normalize and convert the date format (DD/MM/YYYY to Date object)
     const formatDateToDDMMYYYY = (dateStr) => {
       const [day, month, year] = dateStr.split("/");
-      return `${day.padStart(1, 2,"0")}/${month.padStart(2,"0")}/${year}`;
+      return `${day.padStart(1, 2, "0")}/${month.padStart(2, "0")}/${year}`;
     };
 
     const formattedStartDate = startDate
