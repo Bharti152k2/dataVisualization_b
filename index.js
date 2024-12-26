@@ -8,14 +8,14 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", user);
 app.use("/api", analytics);
-app.listen(4000, () => {
-  console.log(`Server is running on port 4000`);
-});
+// app.listen(4000, () => {
+//   console.log(`Server is running on port 4000`);
+// });
 let startServer = async () => {
   try {
     await connectDb();
     console.log("MongoDB connected successfully");
-    app.listen(3000, () => {
+    app.listen(4000, () => {
       console.log(`Server is running on port 4000`);
     });
   } catch (error) {
