@@ -1,5 +1,4 @@
 const Analytics = require("../models/analytics.model");
-const { defaultRoute } = require("./user.controller");
 
 let data = async (req, res) => {
   try {
