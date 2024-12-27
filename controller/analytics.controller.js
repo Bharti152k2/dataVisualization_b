@@ -1,4 +1,5 @@
 const Analytics = require("../models/analytics.model");
+const { defaultRoute } = require("./user.controller");
 
 let data = async (req, res) => {
   try {
@@ -77,7 +78,20 @@ let data = async (req, res) => {
     });
   }
 };
-
+let defaultRoute = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Server is running",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error",
+    });
+  }
+};
 module.exports = {
   data,
+  defaultRoute,
 };
