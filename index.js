@@ -6,7 +6,7 @@ const user = require("./routes/user.routes.js");
 const analytics = require("./routes/analytics.routes.js"); // Import the model
 app.use(express.json());
 app.use(cors());
-app.use("/api", user);
+app.use("/v1", user);
 app.use("/api", analytics);
 let startServer = async () => {
   try {
