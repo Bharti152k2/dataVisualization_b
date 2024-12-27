@@ -9,13 +9,14 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.js"
+      "dest": "api/index.js"
     }
   ],
   "includeFiles": [
-    "database/connect.js",
-    "routes/**/*.js",
+    "controller/**/*.js",
+    "database/**/*.js",
+    "helpers/**/*.js",
     "models/**/*.js",
-    "controller/**/*.js"
+    "routes/**/*.js"
   ]
 }
