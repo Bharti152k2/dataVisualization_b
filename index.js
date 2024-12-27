@@ -6,8 +6,8 @@ const user = require("./routes/user.routes.js");
 const analytics = require("./routes/analytics.routes.js"); // Import the model
 app.use(express.json());
 app.use(cors());
-app.use("/api", user);
-app.use("/api", analytics);
+app.use("/v1", user);
+app.use("/v1", analytics);
 // app.listen(4000, () => {
 //   console.log(`Server is running on port 4000`);
 // });
