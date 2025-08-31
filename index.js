@@ -21,13 +21,13 @@ app.use("/api", analytics);
 // app.listen(4000, () => {
 //   console.log(`Server is running on port 4000`);
 // });
-let PORT = 4000;
+const PORT = process.env.PORT || 4000;
 let startServer = async () => {
   try {
     await connectDb();
     console.log("MongoDB connected successfully");
     app.listen(PORT, () => {
-      console.log(`Server is running on port 4000`);
+      console.log(`Server is running on port ${PORT}`);
     });
   } catch (error) {
     console.log(error);
